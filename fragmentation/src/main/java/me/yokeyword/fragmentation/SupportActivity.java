@@ -1,11 +1,12 @@
 package me.yokeyword.fragmentation;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.MotionEvent;
 
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 
@@ -17,6 +18,7 @@ import me.yokeyword.fragmentation.anim.FragmentAnimator;
  * Created by YoKey on 17/6/20.
  */
 public class SupportActivity extends AppCompatActivity implements ISupportActivity {
+
     final SupportActivityDelegate mDelegate = new SupportActivityDelegate(this);
 
     @Override

@@ -1,13 +1,14 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_zhihu.base.BaseBackFragment;
@@ -62,17 +63,7 @@ public class CycleFragment extends BaseBackFragment {
         initToolbarNav(mToolbar);
 
         mTvName.setText(title);
-        mBtnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start(CycleFragment.newInstance(mNumber + 1));
-            }
-        });
-        mBtnNextWithFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startWithPop(CycleFragment.newInstance(mNumber + 1));
-            }
-        });
+        mBtnNext.setOnClickListener(v -> start(CycleFragment.newInstance(mNumber + 1)));
+        mBtnNextWithFinish.setOnClickListener(v -> startWithPop(CycleFragment.newInstance(mNumber + 1)));
     }
 }

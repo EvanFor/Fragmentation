@@ -1,35 +1,36 @@
 package me.yokeyword.fragmentation;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import android.view.MotionEvent;
-
 import androidx.fragment.app.FragmentationMagician;
+
 import me.yokeyword.fragmentation.anim.DefaultVerticalAnimator;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.fragmentation.debug.DebugStackDelegate;
 import me.yokeyword.fragmentation.queue.Action;
 
 public class SupportActivityDelegate {
-    private ISupportActivity mSupport;
-    private FragmentActivity mActivity;
 
     boolean mPopMultipleNoAnim = false;
     boolean mFragmentClickable = true;
-
+    private ISupportActivity mSupport;
+    private FragmentActivity mActivity;
     private TransactionDelegate mTransactionDelegate;
     private FragmentAnimator mFragmentAnimator;
     private int mDefaultFragmentBackground = 0;
     private DebugStackDelegate mDebugStackDelegate;
 
     public SupportActivityDelegate(ISupportActivity support) {
-        if (!(support instanceof FragmentActivity))
+        if (!(support instanceof FragmentActivity)) {
             throw new RuntimeException("Must extends FragmentActivity/AppCompatActivity");
+        }
         this.mSupport = support;
         this.mActivity = (FragmentActivity) support;
         this.mDebugStackDelegate = new DebugStackDelegate(this.mActivity);
@@ -103,6 +104,10 @@ public class SupportActivityDelegate {
         return new DefaultVerticalAnimator();
     }
 
+    public int getDefaultFragmentBackground() {
+        return mDefaultFragmentBackground;
+    }
+
     /**
      * 当Fragment根布局 没有 设定background属性时,
      * Fragmentation默认使用Theme的android:windowbackground作为Fragment的背景,
@@ -110,10 +115,6 @@ public class SupportActivityDelegate {
      */
     public void setDefaultFragmentBackground(@DrawableRes int backgroundRes) {
         mDefaultFragmentBackground = backgroundRes;
-    }
-
-    public int getDefaultFragmentBackground() {
-        return mDefaultFragmentBackground;
     }
 
     /**

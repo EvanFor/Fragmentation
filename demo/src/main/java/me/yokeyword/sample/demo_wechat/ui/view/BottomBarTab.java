@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.DrawableRes;
-import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -15,6 +13,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.DrawableRes;
+import androidx.core.content.ContextCompat;
 
 import me.yokeyword.sample.R;
 
@@ -46,7 +47,7 @@ public class BottomBarTab extends FrameLayout {
         mContext = context;
         TypedArray typedArray = context.obtainStyledAttributes(new int[]{R.attr.selectableItemBackgroundBorderless});
         Drawable drawable = typedArray.getDrawable(0);
-        setBackgroundDrawable(drawable);
+        setBackground(drawable);
         typedArray.recycle();
 
         LinearLayout lLContainer = new LinearLayout(context);
@@ -105,6 +106,10 @@ public class BottomBarTab extends FrameLayout {
         }
     }
 
+    public int getTabPosition() {
+        return mTabPosition;
+    }
+
     public void setTabPosition(int position) {
         mTabPosition = position;
         if (position == 0) {
@@ -112,8 +117,22 @@ public class BottomBarTab extends FrameLayout {
         }
     }
 
-    public int getTabPosition() {
-        return mTabPosition;
+    /**
+     * 获取当前未读数量
+     */
+    public int getUnreadCount() {
+        int count = 0;
+        if (TextUtils.isEmpty(mTvUnreadCount.getText())) {
+            return count;
+        }
+        if (mTvUnreadCount.getText().toString().equals("99+")) {
+            return 99;
+        }
+        try {
+            count = Integer.parseInt(mTvUnreadCount.getText().toString());
+        } catch (Exception ignored) {
+        }
+        return count;
     }
 
     /**
@@ -131,24 +150,6 @@ public class BottomBarTab extends FrameLayout {
                 mTvUnreadCount.setText(String.valueOf(num));
             }
         }
-    }
-
-    /**
-     * 获取当前未读数量
-     */
-    public int getUnreadCount() {
-        int count = 0;
-        if (TextUtils.isEmpty(mTvUnreadCount.getText())) {
-            return count;
-        }
-        if (mTvUnreadCount.getText().toString().equals("99+")) {
-            return 99;
-        }
-        try {
-            count = Integer.valueOf(mTvUnreadCount.getText().toString());
-        } catch (Exception ignored) {
-        }
-        return count;
     }
 
     private int dip2px(Context context, float dp) {

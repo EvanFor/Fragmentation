@@ -1,14 +1,15 @@
 package me.yokeyword.sample.demo_flow.ui.fragment.discover;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_flow.adapter.DiscoverFragmentAdapter;
@@ -34,9 +35,9 @@ public class DiscoverFragment extends BaseMainFragment {
     }
 
     private void initView(View view) {
-        Toolbar mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        TabLayout mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
-        ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        Toolbar mToolbar = view.findViewById(R.id.toolbar);
+        TabLayout mTabLayout = view.findViewById(R.id.tab_layout);
+        ViewPager mViewPager = view.findViewById(R.id.viewPager);
 
         mToolbar.setTitle(R.string.discover);
         initToolbarNav(mToolbar);

@@ -3,13 +3,14 @@ package me.yokeyword.fragmentation.helper.internal;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentationMagician;
 
 import java.util.List;
 
-import androidx.fragment.app.FragmentationMagician;
 import me.yokeyword.fragmentation.ISupportFragment;
 
 /**
@@ -68,8 +69,7 @@ public class VisibleDelegate {
 
     private void initVisible() {
         if (!mInvisibleWhenLeave && !mFragment.isHidden() && mFragment.getUserVisibleHint()) {
-            if ((mFragment.getParentFragment() != null && isFragmentVisible(mFragment.getParentFragment()))
-                    || mFragment.getParentFragment() == null) {
+            if (mFragment.getParentFragment() == null || isFragmentVisible(mFragment.getParentFragment())) {
                 mNeedDispatch = false;
                 safeDispatchUserVisibleHint(true);
             }
@@ -160,12 +160,9 @@ public class VisibleDelegate {
     }
 
     private void enqueueDispatchVisible() {
-        taskDispatchSupportVisible = new Runnable() {
-            @Override
-            public void run() {
-                taskDispatchSupportVisible = null;
-                dispatchSupportVisible(true);
-            }
+        taskDispatchSupportVisible = () -> {
+            taskDispatchSupportVisible = null;
+            dispatchSupportVisible(true);
         };
         getHandler().post(taskDispatchSupportVisible);
     }

@@ -1,11 +1,12 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.fourth.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.sample.R;
@@ -34,15 +35,10 @@ public class SettingsFragment extends SupportFragment {
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbarSettings);
+        mToolbar = view.findViewById(R.id.toolbarSettings);
 
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _mActivity.onBackPressed();
-            }
-        });
+        mToolbar.setNavigationOnClickListener(v -> _mActivity.onBackPressed());
     }
 
     @Override

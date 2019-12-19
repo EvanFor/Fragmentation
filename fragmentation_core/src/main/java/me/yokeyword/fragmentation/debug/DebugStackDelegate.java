@@ -1,15 +1,11 @@
 package me.yokeyword.fragmentation.debug;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -19,10 +15,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentationMagician;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.fragment.app.FragmentationMagician;
 import me.yokeyword.fragmentation.Fragmentation;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.R;
@@ -43,11 +45,13 @@ public class DebugStackDelegate implements SensorEventListener {
     public void onCreate(int mode) {
         if (mode != Fragmentation.SHAKE) return;
         mSensorManager = (SensorManager) mActivity.getSystemService(Context.SENSOR_SERVICE);
+        assert mSensorManager != null;
         mSensorManager.registerListener(this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void onPostCreate(int mode) {
         if (mode != Fragmentation.BUBBLE) return;
         View root = mActivity.findViewById(android.R.id.content);
@@ -63,12 +67,7 @@ public class DebugStackDelegate implements SensorEventListener {
             stackView.setLayoutParams(params);
             content.addView(stackView);
             stackView.setOnTouchListener(new StackViewTouchListener(stackView, dp18 / 4));
-            stackView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showFragmentStackHierarchyView();
-                }
-            });
+            stackView.setOnClickListener(v -> showFragmentStackHierarchyView());
         }
     }
 
@@ -149,7 +148,7 @@ public class DebugStackDelegate implements SensorEventListener {
 
         List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(mActivity.getSupportFragmentManager());
 
-        if (fragmentList == null || fragmentList.size() < 1) return null;
+        if (fragmentList.size() < 1) return null;
 
         for (Fragment fragment : fragmentList) {
             addDebugFragmentRecord(fragmentRecordList, fragment);
@@ -183,7 +182,7 @@ public class DebugStackDelegate implements SensorEventListener {
         List<DebugFragmentRecord> fragmentRecords = new ArrayList<>();
 
         List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(parentFragment.getChildFragmentManager());
-        if (fragmentList == null || fragmentList.size() < 1) return null;
+        if (fragmentList.size() < 1) return null;
 
         for (int i = fragmentList.size() - 1; i >= 0; i--) {
             Fragment fragment = fragmentList.get(i);
@@ -194,6 +193,7 @@ public class DebugStackDelegate implements SensorEventListener {
 
     private void addDebugFragmentRecord(List<DebugFragmentRecord> fragmentRecords, Fragment fragment) {
         if (fragment != null) {
+            assert fragment.getFragmentManager() != null;
             int backStackCount = fragment.getFragmentManager().getBackStackEntryCount();
             CharSequence name = fragment.getClass().getSimpleName();
             if (backStackCount == 0) {
@@ -211,7 +211,7 @@ public class DebugStackDelegate implements SensorEventListener {
                 }
             }
 
-            if (fragment instanceof ISupportFragment && ((ISupportFragment)fragment).isSupportVisible()) {
+            if (fragment instanceof ISupportFragment && ((ISupportFragment) fragment).isSupportVisible()) {
                 name = span(name, " ☀");
             }
 
@@ -225,7 +225,7 @@ public class DebugStackDelegate implements SensorEventListener {
         return name;
     }
 
-    private class StackViewTouchListener implements View.OnTouchListener {
+    private static class StackViewTouchListener implements View.OnTouchListener {
         private View stackView;
         private float dX, dY = 0f;
         private float downX, downY = 0f;

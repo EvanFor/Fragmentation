@@ -1,9 +1,10 @@
 package me.yokeyword.sample.demo_wechat.base;
 
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import android.view.View;
 
 import me.yokeyword.fragmentation_swipeback.SwipeBackFragment;
 import me.yokeyword.sample.R;

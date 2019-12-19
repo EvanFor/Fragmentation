@@ -4,9 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-import androidx.core.view.ViewCompat;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -64,21 +62,18 @@ public class BottomBar extends LinearLayout {
     }
 
     public BottomBar addItem(final BottomBarTab tab) {
-        tab.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mListener == null) return;
+        tab.setOnClickListener(v -> {
+            if (mListener == null) return;
 
-                int pos = tab.getTabPosition();
-                if (mCurrentPosition == pos) {
-                    mListener.onTabReselected(pos);
-                } else {
-                    mListener.onTabSelected(pos, mCurrentPosition);
-                    tab.setSelected(true);
-                    mListener.onTabUnselected(mCurrentPosition);
-                    mTabs.get(mCurrentPosition).setSelected(false);
-                    mCurrentPosition = pos;
-                }
+            int pos = tab.getTabPosition();
+            if (mCurrentPosition == pos) {
+                mListener.onTabReselected(pos);
+            } else {
+                mListener.onTabSelected(pos, mCurrentPosition);
+                tab.setSelected(true);
+                mListener.onTabUnselected(mCurrentPosition);
+                mTabs.get(mCurrentPosition).setSelected(false);
+                mCurrentPosition = pos;
             }
         });
         tab.setTabPosition(mTabLayout.getChildCount());
@@ -93,12 +88,7 @@ public class BottomBar extends LinearLayout {
     }
 
     public void setCurrentItem(final int position) {
-        mTabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mTabLayout.getChildAt(position).performClick();
-            }
-        });
+        mTabLayout.post(() -> mTabLayout.getChildAt(position).performClick());
     }
 
     public int getCurrentItemPosition() {
@@ -111,14 +101,6 @@ public class BottomBar extends LinearLayout {
     public BottomBarTab getItem(int index) {
         if (mTabs.size() < index) return null;
         return mTabs.get(index);
-    }
-
-    public interface OnTabSelectedListener {
-        void onTabSelected(int position, int prePosition);
-
-        void onTabUnselected(int position);
-
-        void onTabReselected(int position);
     }
 
     @Override
@@ -138,37 +120,6 @@ public class BottomBar extends LinearLayout {
         }
         mCurrentPosition = ss.position;
     }
-
-    static class SavedState extends BaseSavedState {
-        private int position;
-
-        public SavedState(Parcel source) {
-            super(source);
-            position = source.readInt();
-        }
-
-        public SavedState(Parcelable superState, int position) {
-            super(superState);
-            this.position = position;
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeInt(position);
-        }
-
-        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
-    }
-
 
     public void hide() {
         hide(true);
@@ -218,8 +169,45 @@ public class BottomBar extends LinearLayout {
                         .setDuration(TRANSLATE_DURATION_MILLIS)
                         .translationY(translationY);
             } else {
-                ViewCompat.setTranslationY(this, translationY);
+                this.setTranslationY(translationY);
             }
+        }
+    }
+
+    public interface OnTabSelectedListener {
+        void onTabSelected(int position, int prePosition);
+
+        void onTabUnselected(int position);
+
+        void onTabReselected(int position);
+    }
+
+    static class SavedState extends BaseSavedState {
+        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
+        private int position;
+
+        public SavedState(Parcel source) {
+            super(source);
+            position = source.readInt();
+        }
+
+        public SavedState(Parcelable superState, int position) {
+            super(superState);
+            this.position = position;
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(position);
         }
     }
 }

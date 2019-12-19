@@ -9,8 +9,10 @@ import java.util.List;
 public class FragmentationMagician {
 
     public static boolean isStateSaved(FragmentManager fragmentManager) {
-        if (!(fragmentManager instanceof FragmentManagerImpl))
+        if (!(fragmentManager instanceof FragmentManagerImpl)) {
             return false;
+        }
+
         try {
             FragmentManagerImpl fragmentManagerImpl = (FragmentManagerImpl) fragmentManager;
             return fragmentManagerImpl.isStateSaved();
@@ -28,12 +30,7 @@ public class FragmentationMagician {
      * to change unexpectedly on the user.
      */
     public static void popBackStackAllowingStateLoss(final FragmentManager fragmentManager) {
-        FragmentationMagician.hookStateSaved(fragmentManager, new Runnable() {
-            @Override
-            public void run() {
-                fragmentManager.popBackStack();
-            }
-        });
+        FragmentationMagician.hookStateSaved(fragmentManager, fragmentManager::popBackStack);
     }
 
     /**
@@ -41,12 +38,7 @@ public class FragmentationMagician {
      * activity's state is saved.
      */
     public static void popBackStackImmediateAllowingStateLoss(final FragmentManager fragmentManager) {
-        FragmentationMagician.hookStateSaved(fragmentManager, new Runnable() {
-            @Override
-            public void run() {
-                fragmentManager.popBackStackImmediate();
-            }
-        });
+        FragmentationMagician.hookStateSaved(fragmentManager, fragmentManager::popBackStackImmediate);
     }
 
     /**
@@ -54,12 +46,7 @@ public class FragmentationMagician {
      * activity's state is saved.
      */
     public static void popBackStackAllowingStateLoss(final FragmentManager fragmentManager, final String name, final int flags) {
-        FragmentationMagician.hookStateSaved(fragmentManager, new Runnable() {
-            @Override
-            public void run() {
-                fragmentManager.popBackStack(name, flags);
-            }
-        });
+        FragmentationMagician.hookStateSaved(fragmentManager, () -> fragmentManager.popBackStack(name, flags));
     }
 
     /**
@@ -67,12 +54,7 @@ public class FragmentationMagician {
      * activity's state is saved.
      */
     public static void executePendingTransactionsAllowingStateLoss(final FragmentManager fragmentManager) {
-        FragmentationMagician.hookStateSaved(fragmentManager, new Runnable() {
-            @Override
-            public void run() {
-                fragmentManager.executePendingTransactions();
-            }
-        });
+        FragmentationMagician.hookStateSaved(fragmentManager, fragmentManager::executePendingTransactions);
     }
 
     public static List<Fragment> getActiveFragments(FragmentManager fragmentManager) {

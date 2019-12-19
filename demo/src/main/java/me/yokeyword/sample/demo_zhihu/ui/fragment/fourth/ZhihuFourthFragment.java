@@ -1,11 +1,12 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.fourth;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_zhihu.base.BaseMainFragment;
@@ -42,7 +43,7 @@ public class ZhihuFourthFragment extends BaseMainFragment {
             loadFragment();
         }
 
-        mToolbar = (Toolbar) mView.findViewById(R.id.toolbar);
+        mToolbar = mView.findViewById(R.id.toolbar);
         mToolbar.setTitle(R.string.me);
     }
 

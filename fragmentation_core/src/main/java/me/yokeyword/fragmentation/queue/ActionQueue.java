@@ -15,6 +15,7 @@ import me.yokeyword.fragmentation.SupportHelper;
  * Created by YoKey on 17/12/29.
  */
 public class ActionQueue {
+
     private Queue<Action> mQueue = new LinkedList<>();
     private Handler mMainHandler;
 
@@ -31,12 +32,7 @@ public class ActionQueue {
             return;
         }
 
-        mMainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                enqueueAction(action);
-            }
-        });
+        mMainHandler.post(() -> enqueueAction(action));
     }
 
     private void enqueueAction(Action action) {
@@ -50,6 +46,7 @@ public class ActionQueue {
         if (mQueue.isEmpty()) return;
 
         Action action = mQueue.peek();
+        assert action != null;
         action.run();
 
         executeNextAction(action);
@@ -61,21 +58,16 @@ public class ActionQueue {
             action.duration = top == null ? Action.DEFAULT_POP_TIME : top.getSupportDelegate().getExitAnimDuration();
         }
 
-        mMainHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mQueue.poll();
-                handleAction();
-            }
+        mMainHandler.postDelayed(() -> {
+            mQueue.poll();
+            handleAction();
         }, action.duration);
     }
 
     private boolean isThrottleBACK(Action action) {
         if (action.action == Action.ACTION_BACK) {
             Action head = mQueue.peek();
-            if (head != null && head.action == Action.ACTION_POP) {
-                return true;
-            }
+            return head != null && head.action == Action.ACTION_POP;
         }
         return false;
     }

@@ -2,12 +2,13 @@ package me.yokeyword.sample.demo_zhihu.ui.fragment.third.child.child;
 
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.DefaultNoAnimator;
@@ -61,18 +62,15 @@ public class ContentFragment extends SupportFragment {
     }
 
     private void initView(View view) {
-        mTvContent = (TextView) view.findViewById(R.id.tv_content);
-        mBtnNext = (Button) view.findViewById(R.id.btn_next);
+        mTvContent = view.findViewById(R.id.tv_content);
+        mBtnNext = view.findViewById(R.id.btn_next);
 
         mTvContent.setText("Content:\n" + mMenu);
 
-        mBtnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 和MsgFragment同级别的跳转 交给MsgFragment处理
-                if (getParentFragment() instanceof ShopFragment) {
-                    ((ShopFragment) getParentFragment()).start(CycleFragment.newInstance(1));
-                }
+        mBtnNext.setOnClickListener(v -> {
+            // 和MsgFragment同级别的跳转 交给MsgFragment处理
+            if (getParentFragment() instanceof ShopFragment) {
+                ((ShopFragment) getParentFragment()).start(CycleFragment.newInstance(1));
             }
         });
     }

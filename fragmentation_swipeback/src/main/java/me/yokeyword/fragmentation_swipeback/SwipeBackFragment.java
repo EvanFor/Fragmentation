@@ -1,9 +1,10 @@
 package me.yokeyword.fragmentation_swipeback;
 
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.FloatRange;
 import androidx.annotation.Nullable;
-import android.view.View;
 
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.SwipeBackLayout;

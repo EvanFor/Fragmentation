@@ -1,12 +1,13 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.third.child.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -78,12 +79,7 @@ public class MenuListFragment extends SupportFragment {
         mRecy.setAdapter(mAdapter);
         mAdapter.setDatas(mMenus);
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
-                showContent(position);
-            }
-        });
+        mAdapter.setOnItemClickListener((position, view, vh) -> showContent(position));
 
         if (savedInstanceState != null) {
             mCurrentPosition = savedInstanceState.getInt(SAVE_STATE_POSITION);
@@ -105,6 +101,7 @@ public class MenuListFragment extends SupportFragment {
 
         ContentFragment fragment = ContentFragment.newInstance(mMenus.get(position));
 
+        assert getParentFragment() != null;
         ((ShopFragment) getParentFragment()).switchContentFragment(fragment);
     }
 

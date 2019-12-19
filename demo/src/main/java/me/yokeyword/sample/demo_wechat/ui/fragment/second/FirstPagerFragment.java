@@ -1,13 +1,15 @@
 package me.yokeyword.sample.demo_wechat.ui.fragment.second;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -53,8 +55,8 @@ public class FirstPagerFragment extends SupportFragment implements SwipeRefreshL
     private void initView(View view) {
         EventBusActivityScope.getDefault(_mActivity).register(this);
 
-        mRecy = (RecyclerView) view.findViewById(R.id.recy);
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+        mRecy = view.findViewById(R.id.recy);
+        mRefreshLayout = view.findViewById(R.id.refresh_layout);
 
         mRefreshLayout.setOnRefreshListener(this);
 
@@ -66,7 +68,7 @@ public class FirstPagerFragment extends SupportFragment implements SwipeRefreshL
 
         mRecy.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 mScrollTotal += dy;
                 if (mScrollTotal <= 0) {
@@ -77,12 +79,11 @@ public class FirstPagerFragment extends SupportFragment implements SwipeRefreshL
             }
         });
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view, RecyclerView.ViewHolder holder) {
-                // 通知MainFragment跳转至NewFeatureFragment
-                ((MainFragment) getParentFragment().getParentFragment()).startBrotherFragment(NewFeatureFragment.newInstance());
-            }
+        mAdapter.setOnItemClickListener((position, view1, holder) -> {
+            // 通知MainFragment跳转至NewFeatureFragment
+            assert getParentFragment() != null;
+            assert getParentFragment().getParentFragment() != null;
+            ((MainFragment) getParentFragment().getParentFragment()).startBrotherFragment(NewFeatureFragment.newInstance());
         });
 
         // Init Datas
@@ -96,12 +97,7 @@ public class FirstPagerFragment extends SupportFragment implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        mRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(false);
-            }
-        }, 2500);
+        mRefreshLayout.postDelayed(() -> mRefreshLayout.setRefreshing(false), 2500);
     }
 
     /**

@@ -1,12 +1,13 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.third.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ public class ShopFragment extends SupportFragment {
     }
 
     private void initView(View view, Bundle savedInstanceState) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mToolbar = view.findViewById(R.id.toolbar);
 
         mToolbar.setTitle(R.string.shop);
 

@@ -1,14 +1,15 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.second.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_zhihu.base.BaseBackFragment;
@@ -53,10 +54,10 @@ public class ModifyDetailFragment extends BaseBackFragment {
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mEtModiyTitle = (EditText) view.findViewById(R.id.et_modify_title);
-        mBtnModify = (Button) view.findViewById(R.id.btn_modify);
-        mBtnNext = (Button) view.findViewById(R.id.btn_next);
+        mToolbar = view.findViewById(R.id.toolbar);
+        mEtModiyTitle = view.findViewById(R.id.et_modify_title);
+        mBtnModify = view.findViewById(R.id.btn_modify);
+        mBtnNext = view.findViewById(R.id.btn_next);
 
         mToolbar.setTitle(R.string.start_result_test);
         initToolbarNav(mToolbar);
@@ -64,24 +65,16 @@ public class ModifyDetailFragment extends BaseBackFragment {
         mEtModiyTitle.setText(mTitle);
 
         // 显示 软键盘
-//        showSoftInput(mEtModiyTitle);
+        // showSoftInput(mEtModiyTitle);
 
-        mBtnModify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString(DetailFragment.KEY_RESULT_TITLE, mEtModiyTitle.getText().toString());
-                setFragmentResult(RESULT_OK, bundle);
+        mBtnModify.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(DetailFragment.KEY_RESULT_TITLE, mEtModiyTitle.getText().toString());
+            setFragmentResult(RESULT_OK, bundle);
 
-                Toast.makeText(_mActivity, R.string.modify_success, Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(_mActivity, R.string.modify_success, Toast.LENGTH_SHORT).show();
         });
-        mBtnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start(CycleFragment.newInstance(1));
-            }
-        });
+        mBtnNext.setOnClickListener(v -> start(CycleFragment.newInstance(1)));
     }
 
     @Override

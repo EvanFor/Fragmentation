@@ -1,5 +1,4 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'bintray-release'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -7,7 +6,6 @@ android {
     defaultConfig {
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-
         consumerProguardFiles 'proguard-rules.pro'
     }
 
@@ -15,19 +13,14 @@ android {
     lintOptions {
         abortOnError false
     }
+
+    compileOptions {
+        encoding "UTF-8"
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     compileOnly "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
 }
-
-//publish {
-//    artifactId = 'fragmentation-core'
-//    userOrg = rootProject.userOrg
-//    groupId = rootProject.groupId
-//    uploadName = 'Fragmentation-Core'
-//    publishVersion = rootProject.publishVersion
-//    description = rootProject.desc
-//    website = rootProject.website
-//    licences = rootProject.licences
-//}

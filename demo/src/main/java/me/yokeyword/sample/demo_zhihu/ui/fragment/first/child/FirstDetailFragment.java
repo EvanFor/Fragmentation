@@ -1,14 +1,16 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.first.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_zhihu.base.BaseBackFragment;
@@ -52,21 +54,16 @@ public class FirstDetailFragment extends BaseBackFragment {
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mImgDetail = (ImageView) view.findViewById(R.id.img_detail);
-        mTvTitle = (TextView) view.findViewById(R.id.tv_content);
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab);
+        mToolbar = view.findViewById(R.id.toolbar);
+        mImgDetail = view.findViewById(R.id.img_detail);
+        mTvTitle = view.findViewById(R.id.tv_content);
+        mFab = view.findViewById(R.id.fab);
 
         mToolbar.setTitle("");
         initToolbarNav(mToolbar);
         mImgDetail.setImageResource(mArticle.getImgRes());
         mTvTitle.setText(mArticle.getTitle());
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start(CycleFragment.newInstance(1));
-            }
-        });
+        mFab.setOnClickListener(v -> start(CycleFragment.newInstance(1)));
     }
 }

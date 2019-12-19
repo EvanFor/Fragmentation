@@ -1,11 +1,12 @@
 package me.yokeyword.sample.demo_flow.ui.fragment.discover;
 
 import android.os.Bundle;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,6 @@ import java.util.List;
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_flow.adapter.PagerAdapter;
 import me.yokeyword.sample.demo_flow.base.MySupportFragment;
-import me.yokeyword.sample.demo_flow.listener.OnItemClickListener;
 import me.yokeyword.sample.demo_flow.ui.fragment.CycleFragment;
 
 
@@ -55,40 +55,34 @@ public class PagerChildFragment extends MySupportFragment {
     }
 
     private void initView(View view) {
-        mRecy = (RecyclerView) view.findViewById(R.id.recy);
+        mRecy = view.findViewById(R.id.recy);
 
         mAdapter = new PagerAdapter(_mActivity);
         LinearLayoutManager manager = new LinearLayoutManager(_mActivity);
         mRecy.setLayoutManager(manager);
         mRecy.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                if (getParentFragment() instanceof DiscoverFragment) {
-                    ((DiscoverFragment) getParentFragment()).start(CycleFragment.newInstance(1));
-                }
+        mAdapter.setOnItemClickListener((position, view1) -> {
+            if (getParentFragment() instanceof DiscoverFragment) {
+                ((DiscoverFragment) getParentFragment()).start(CycleFragment.newInstance(1));
             }
         });
 
-        mRecy.post(new Runnable() {
-            @Override
-            public void run() {
-                // Init Datas
-                List<String> items = new ArrayList<>();
-                for (int i = 0; i < 20; i++) {
-                    String item;
-                    if (mFrom == 0) {
-                        item = getString(R.string.recommend) + " " + i;
-                    } else if (mFrom == 1) {
-                        item = getString(R.string.hot) +" " + i;
-                    } else {
-                        item = getString(R.string.favorite) +" " + i;
-                    }
-                    items.add(item);
+        mRecy.post(() -> {
+            // Init Datas
+            List<String> items = new ArrayList<>();
+            for (int i = 0; i < 20; i++) {
+                String item;
+                if (mFrom == 0) {
+                    item = getString(R.string.recommend) + " " + i;
+                } else if (mFrom == 1) {
+                    item = getString(R.string.hot) + " " + i;
+                } else {
+                    item = getString(R.string.favorite) + " " + i;
                 }
-                mAdapter.setDatas(items);
+                items.add(item);
             }
+            mAdapter.setDatas(items);
         });
     }
 }

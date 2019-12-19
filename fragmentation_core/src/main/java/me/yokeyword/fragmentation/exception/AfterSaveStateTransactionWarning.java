@@ -2,6 +2,8 @@ package me.yokeyword.fragmentation.exception;
 
 import android.util.Log;
 
+import java.util.Objects;
+
 /**
  * Perform the transaction action after onSaveInstanceState.
  * <p>
@@ -36,7 +38,7 @@ public class AfterSaveStateTransactionWarning extends RuntimeException {
 
     public AfterSaveStateTransactionWarning(String action) {
         super("Warning: Perform this " + action + " action after onSaveInstanceState!");
-        Log.w("Fragmentation", getMessage());
+        Log.w("Fragmentation", Objects.requireNonNull(getMessage()));
     }
 
 }

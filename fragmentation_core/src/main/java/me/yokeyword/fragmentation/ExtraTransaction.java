@@ -1,13 +1,14 @@
 package me.yokeyword.fragmentation;
 
 import android.os.Build;
+import android.view.View;
+
 import androidx.annotation.AnimRes;
 import androidx.annotation.AnimatorRes;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import android.view.View;
 
 import java.util.ArrayList;
 
@@ -19,10 +20,7 @@ import me.yokeyword.fragmentation.helper.internal.TransactionRecord;
 public abstract class ExtraTransaction {
 
     /**
-     * @param tag Optional tag name for the fragment, to later retrieve the
-     *            fragment with {@link SupportHelper#findFragment(FragmentManager, String)}
-     *            , pop(String)
-     *            or FragmentManager.findFragmentByTag(String).
+     * @param tag Optional tag name for the fragment, to later retrieve the   fragment with {@link SupportHelper#findFragment(FragmentManager, String)}, pop(String) or FragmentManager.findFragmentByTag(String).
      */
     public abstract ExtraTransaction setTag(String tag);
 
@@ -31,8 +29,7 @@ public abstract class ExtraTransaction {
      * entering and exiting in this transaction. These animations will not be
      * played when popping the back stack.
      */
-    public abstract ExtraTransaction setCustomAnimations(@AnimatorRes @AnimRes int targetFragmentEnter,
-                                                         @AnimatorRes @AnimRes int currentFragmentPopExit);
+    public abstract ExtraTransaction setCustomAnimations(@AnimatorRes @AnimRes int targetFragmentEnter, @AnimatorRes @AnimRes int currentFragmentPopExit);
 
     /**
      * Set specific animation resources to run for the fragments that are
@@ -40,10 +37,7 @@ public abstract class ExtraTransaction {
      * and <code>targetFragmentExit</code> animations will be played for targetFragmentEnter/currentFragmentPopExit
      * operations specifically when popping the back stack.
      */
-    public abstract ExtraTransaction setCustomAnimations(@AnimatorRes @AnimRes int targetFragmentEnter,
-                                                         @AnimatorRes @AnimRes int currentFragmentPopExit,
-                                                         @AnimatorRes @AnimRes int currentFragmentPopEnter,
-                                                         @AnimatorRes @AnimRes int targetFragmentExit);
+    public abstract ExtraTransaction setCustomAnimations(@AnimatorRes @AnimRes int targetFragmentEnter, @AnimatorRes @AnimRes int currentFragmentPopExit, @AnimatorRes @AnimRes int currentFragmentPopEnter, @AnimatorRes @AnimRes int targetFragmentExit);
 
     /**
      * Used with custom Transitions to map a View from a removed or hidden
@@ -150,8 +144,7 @@ public abstract class ExtraTransaction {
         }
 
         @Override
-        public ExtraTransaction setCustomAnimations(@AnimRes int targetFragmentEnter
-                , @AnimRes int currentFragmentPopExit) {
+        public ExtraTransaction setCustomAnimations(@AnimRes int targetFragmentEnter, @AnimRes int currentFragmentPopExit) {
             mRecord.targetFragmentEnter = targetFragmentEnter;
             mRecord.currentFragmentPopExit = currentFragmentPopExit;
             mRecord.currentFragmentPopEnter = 0;
@@ -160,10 +153,7 @@ public abstract class ExtraTransaction {
         }
 
         @Override
-        public ExtraTransaction setCustomAnimations(@AnimRes int targetFragmentEnter,
-                                                    @AnimRes int currentFragmentPopExit,
-                                                    @AnimRes int currentFragmentPopEnter,
-                                                    @AnimRes int targetFragmentExit) {
+        public ExtraTransaction setCustomAnimations(@AnimRes int targetFragmentEnter, @AnimRes int currentFragmentPopExit, @AnimRes int currentFragmentPopEnter, @AnimRes int targetFragmentExit) {
             mRecord.targetFragmentEnter = targetFragmentEnter;
             mRecord.currentFragmentPopExit = currentFragmentPopExit;
             mRecord.currentFragmentPopEnter = currentFragmentPopEnter;

@@ -1,13 +1,14 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     repositories {
         jcenter()
         google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
-//        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.android.tools.build:gradle:4.0.0-alpha06'
     }
 }
 
@@ -15,6 +16,9 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     }
 }
 
@@ -23,9 +27,9 @@ task clean(type: Delete) {
 }
 
 ext {
-    compileSdkVersion = 28
-    minSdkVersion = 14
+    compileSdkVersion = 29
+    minSdkVersion = 19
     targetSdkVersion = compileSdkVersion
 
-    appCompatVersion = "1.1.0-alpha01"
+    appCompatVersion = "1.2.0-alpha01"
 }

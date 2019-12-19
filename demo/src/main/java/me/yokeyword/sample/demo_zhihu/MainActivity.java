@@ -1,6 +1,7 @@
 package me.yokeyword.sample.demo_zhihu;
 
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
@@ -66,7 +67,7 @@ public class MainActivity extends SupportActivity implements BaseMainFragment.On
     }
 
     private void initView() {
-        mBottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        mBottomBar = findViewById(R.id.bottomBar);
 
         mBottomBar.addItem(new BottomBarTab(this, R.drawable.ic_home_white_24dp))
                 .addItem(new BottomBarTab(this, R.drawable.ic_discover_white_24dp))
@@ -128,15 +129,15 @@ public class MainActivity extends SupportActivity implements BaseMainFragment.On
         mBottomBar.setCurrentItem(0);
     }
 
-    /**
+    /*
      * 这里暂没实现,忽略
      */
-//    @Subscribe
-//    public void onHiddenBottombarEvent(boolean hidden) {
-//        if (hidden) {
-//            mBottomBar.hide();
-//        } else {
-//            mBottomBar.show();
-//        }
-//    }
+    /*@Subscribe
+    public void onHiddenBottombarEvent(boolean hidden) {
+        if (hidden) {
+            mBottomBar.hide();
+        } else {
+            mBottomBar.show();
+        }
+    }*/
 }

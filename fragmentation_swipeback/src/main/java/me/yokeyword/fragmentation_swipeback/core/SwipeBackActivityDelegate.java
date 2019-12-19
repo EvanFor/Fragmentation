@@ -3,8 +3,9 @@ package me.yokeyword.fragmentation_swipeback.core;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.FragmentActivity;
 
 import me.yokeyword.fragmentation.ISupportActivity;
 import me.yokeyword.fragmentation.SwipeBackLayout;
@@ -14,12 +15,14 @@ import me.yokeyword.fragmentation.SwipeBackLayout;
  */
 
 public class SwipeBackActivityDelegate {
+
     private FragmentActivity mActivity;
     private SwipeBackLayout mSwipeBackLayout;
 
     public SwipeBackActivityDelegate(ISwipeBackActivity swipeBackActivity) {
-        if (!(swipeBackActivity instanceof FragmentActivity) || !(swipeBackActivity instanceof ISupportActivity))
+        if (!(swipeBackActivity instanceof FragmentActivity) || !(swipeBackActivity instanceof ISupportActivity)) {
             throw new RuntimeException("Must extends FragmentActivity/AppCompatActivity and implements ISupportActivity");
+        }
         mActivity = (FragmentActivity) swipeBackActivity;
     }
 

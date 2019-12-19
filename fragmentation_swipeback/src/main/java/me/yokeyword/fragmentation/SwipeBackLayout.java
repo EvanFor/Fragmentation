@@ -5,12 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.FloatRange;
-import androidx.annotation.IntDef;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.view.ViewCompat;
-import androidx.customview.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -19,13 +13,21 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
+import androidx.customview.widget.ViewDragHelper;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentationMagician;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.fragment.app.FragmentationMagician;
 import me.yokeyword.fragmentation_swipeback.core.ISwipeBackActivity;
 
 /**
@@ -112,10 +114,6 @@ public class SwipeBackLayout extends FrameLayout {
 
     private Context mContext;
 
-    public enum EdgeLevel {
-        MAX, MIN, MED
-    }
-
     public SwipeBackLayout(Context context) {
         this(context, null);
     }
@@ -188,11 +186,6 @@ public class SwipeBackLayout extends FrameLayout {
         }
     }
 
-    @IntDef({EDGE_LEFT, EDGE_RIGHT, EDGE_ALL})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface EdgeOrientation {
-    }
-
     /**
      * Set a drawable used for edge shadow.
      */
@@ -234,35 +227,6 @@ public class SwipeBackLayout extends FrameLayout {
             return;
         }
         mListeners.remove(listener);
-    }
-
-    public interface OnSwipeListener {
-        /**
-         * Invoke when state change
-         *
-         * @param state flag to describe scroll state
-         * @see #STATE_IDLE
-         * @see #STATE_DRAGGING
-         * @see #STATE_SETTLING
-         * @see #STATE_FINISHED
-         */
-        void onDragStateChange(int state);
-
-        /**
-         * Invoke when edge touched
-         *
-         * @param oritentationEdgeFlag edge flag describing the edge being touched
-         * @see #EDGE_LEFT
-         * @see #EDGE_RIGHT
-         */
-        void onEdgeTouch(int oritentationEdgeFlag);
-
-        /**
-         * Invoke when scroll percent over the threshold for the first time
-         *
-         * @param scrollPercent scroll percent of this view
-         */
-        void onDragScrolled(float scrollPercent);
     }
 
     @Override
@@ -338,7 +302,7 @@ public class SwipeBackLayout extends FrameLayout {
 
                 if (mHelper.getCapturedView() != null) {
                     int leftOffset = (int) ((mHelper.getCapturedView().getLeft() - getWidth()) * mParallaxOffset * mScrimOpacity);
-                    mPreFragment.getView().setX(leftOffset > 0 ? 0 : leftOffset);
+                    mPreFragment.getView().setX(Math.min(leftOffset, 0));
                 }
             }
         }
@@ -404,6 +368,7 @@ public class SwipeBackLayout extends FrameLayout {
         try {
             DisplayMetrics metrics = new DisplayMetrics();
             WindowManager windowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+            assert windowManager != null;
             windowManager.getDefaultDisplay().getMetrics(metrics);
             Field mEdgeSize = mHelper.getClass().getDeclaredField("mEdgeSize");
             mEdgeSize.setAccessible(true);
@@ -418,17 +383,84 @@ public class SwipeBackLayout extends FrameLayout {
                     mEdgeSize.setInt(mHelper, ((int) (20 * metrics.density + 0.5f)));
                 }
             }
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private void onDragFinished() {
+        if (mListeners != null) {
+            for (OnSwipeListener listener : mListeners) {
+                listener.onDragStateChange(STATE_FINISHED);
+            }
+        }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if (!mEnable) return super.onInterceptTouchEvent(ev);
+        try {
+            return mHelper.shouldInterceptTouchEvent(ev);
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (!mEnable) return super.onTouchEvent(event);
+        try {
+            mHelper.processTouchEvent(event);
+            return true;
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+        return false;
+    }
+
+    public enum EdgeLevel {
+        MAX, MIN, MED
+    }
+
+    @IntDef({EDGE_LEFT, EDGE_RIGHT, EDGE_ALL})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface EdgeOrientation {
+    }
+
+    public interface OnSwipeListener {
+        /**
+         * Invoke when state change
+         *
+         * @param state flag to describe scroll state
+         * @see #STATE_IDLE
+         * @see #STATE_DRAGGING
+         * @see #STATE_SETTLING
+         * @see #STATE_FINISHED
+         */
+        void onDragStateChange(int state);
+
+        /**
+         * Invoke when edge touched
+         *
+         * @param oritentationEdgeFlag edge flag describing the edge being touched
+         * @see #EDGE_LEFT
+         * @see #EDGE_RIGHT
+         */
+        void onEdgeTouch(int oritentationEdgeFlag);
+
+        /**
+         * Invoke when scroll percent over the threshold for the first time
+         *
+         * @param scrollPercent scroll percent of this view
+         */
+        void onDragScrolled(float scrollPercent);
     }
 
     private class ViewDragCallback extends ViewDragHelper.Callback {
 
         @Override
-        public boolean tryCaptureView(View child, int pointerId) {
+        public boolean tryCaptureView(@NonNull View child, int pointerId) {
             boolean dragEnable = mHelper.isEdgeTouched(mEdgeFlag, pointerId);
             if (dragEnable) {
                 if (mHelper.isEdgeTouched(EDGE_LEFT, pointerId)) {
@@ -445,6 +477,7 @@ public class SwipeBackLayout extends FrameLayout {
 
                 if (mPreFragment == null) {
                     if (mFragment != null) {
+                        assert ((Fragment) mFragment).getFragmentManager() != null;
                         List<Fragment> fragmentList = FragmentationMagician.getActiveFragments(((Fragment) mFragment).getFragmentManager());
                         if (fragmentList != null && fragmentList.size() > 1) {
                             int index = fragmentList.indexOf(mFragment);
@@ -561,36 +594,5 @@ public class SwipeBackLayout extends FrameLayout {
                 mCurrentSwipeOrientation = edgeFlags;
             }
         }
-    }
-
-    private void onDragFinished() {
-        if (mListeners != null) {
-            for (OnSwipeListener listener : mListeners) {
-                listener.onDragStateChange(STATE_FINISHED);
-            }
-        }
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (!mEnable) return super.onInterceptTouchEvent(ev);
-        try {
-            return mHelper.shouldInterceptTouchEvent(ev);
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!mEnable) return super.onTouchEvent(event);
-        try {
-            mHelper.processTouchEvent(event);
-            return true;
-        } catch (Exception ignored) {
-            ignored.printStackTrace();
-        }
-        return false;
     }
 }

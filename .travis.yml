@@ -4,20 +4,20 @@ sudo: false
 
 android:
   components:
-  - tools
-  - platform-tools
-  - build-tools-27.0.2
-  - android-27
-  - extra-android-m2repository
-  - extra-android-support
+    - tools
+    - platform-tools
+    - build-tools-27.0.2
+    - android-27
+    - extra-android-m2repository
+    - extra-android-support
 
 before_install:
-- yes | sdkmanager "platforms;android-27"
-- openssl aes-256-cbc -K $encrypted_e460bf741e28_key -iv $encrypted_e460bf741e28_iv
-  -in demo/fragmentation.jks.enc -out demo/fragmentation.jks -d
+  - yes | sdkmanager "platforms;android-27"
+  - openssl aes-256-cbc -K $encrypted_e460bf741e28_key -iv $encrypted_e460bf741e28_iv
+    -in demo/fragmentation.jks.enc -out demo/fragmentation.jks -d
 
 script:
-- ./gradlew assembleRelease
+  - ./gradlew assembleRelease
 
 deploy:
   provider: releases
@@ -29,4 +29,4 @@ deploy:
     tags: true
 
 after_deploy:
-- curl -F "file=@demo/build/outputs/apk/release/fragmentation.apk" -F "uKey=$UKEY" -F "_api_key=$API_KEY" https://qiniu-storage.pgyer.com/apiv1/app/upload
+  - curl -F "file=@demo/build/outputs/apk/release/fragmentation.apk" -F "uKey=$UKEY" -F "_api_key=$API_KEY" https://qiniu-storage.pgyer.com/apiv1/app/upload

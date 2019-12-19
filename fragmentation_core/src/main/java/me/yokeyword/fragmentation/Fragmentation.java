@@ -30,9 +30,14 @@ public class Fragmentation {
     private int mode = BUBBLE;
     private ExceptionHandler handler;
 
-    @IntDef({NONE, SHAKE, BUBBLE})
-    @Retention(RetentionPolicy.SOURCE)
-    @interface StackViewMode {
+    private Fragmentation(FragmentationBuilder builder) {
+        debug = builder.debug;
+        if (debug) {
+            mode = builder.mode;
+        } else {
+            mode = NONE;
+        }
+        handler = builder.handler;
     }
 
     public static Fragmentation getDefault() {
@@ -46,14 +51,8 @@ public class Fragmentation {
         return INSTANCE;
     }
 
-    Fragmentation(FragmentationBuilder builder) {
-        debug = builder.debug;
-        if (debug) {
-            mode = builder.mode;
-        } else {
-            mode = NONE;
-        }
-        handler = builder.handler;
+    public static FragmentationBuilder builder() {
+        return new FragmentationBuilder();
     }
 
     public boolean isDebug() {
@@ -80,8 +79,9 @@ public class Fragmentation {
         this.mode = mode;
     }
 
-    public static FragmentationBuilder builder() {
-        return new FragmentationBuilder();
+    @IntDef({NONE, SHAKE, BUBBLE})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface StackViewMode {
     }
 
     public static class FragmentationBuilder {

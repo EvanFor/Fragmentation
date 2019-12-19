@@ -2,8 +2,6 @@ package me.yokeyword.sample.demo_flow.ui.fragment.account;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_flow.base.BaseBackFragment;
@@ -64,32 +65,24 @@ public class LoginFragment extends BaseBackFragment {
         toolbar.setTitle(R.string.login);
         initToolbarNav(toolbar);
 
-        mBtnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String strAccount = mEtAccount.getText().toString();
-                String strPassword = mEtPassword.getText().toString();
-                if (TextUtils.isEmpty(strAccount.trim())) {
-                    Toast.makeText(_mActivity, R.string.error_username, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(strPassword.trim())) {
-                    Toast.makeText(_mActivity, R.string.error_pwd, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // 登录成功
-                mOnLoginSuccessListener.onLoginSuccess(strAccount);
-                pop();
+        mBtnLogin.setOnClickListener(v -> {
+            String strAccount = mEtAccount.getText().toString();
+            String strPassword = mEtPassword.getText().toString();
+            if (TextUtils.isEmpty(strAccount.trim())) {
+                Toast.makeText(_mActivity, R.string.error_username, Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (TextUtils.isEmpty(strPassword.trim())) {
+                Toast.makeText(_mActivity, R.string.error_pwd, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 登录成功
+            mOnLoginSuccessListener.onLoginSuccess(strAccount);
+            pop();
         });
 
-        mBtnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start(RegisterFragment.newInstance());
-            }
-        });
+        mBtnRegister.setOnClickListener(v -> start(RegisterFragment.newInstance()));
     }
 
     @Override
@@ -98,13 +91,13 @@ public class LoginFragment extends BaseBackFragment {
         mOnLoginSuccessListener = null;
     }
 
-    public interface OnLoginSuccessListener {
-        void onLoginSuccess(String account);
-    }
-
     @Override
     public void onSupportInvisible() {
         super.onSupportInvisible();
         hideSoftInput();
+    }
+
+    public interface OnLoginSuccessListener {
+        void onLoginSuccess(String account);
     }
 }

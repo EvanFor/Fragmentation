@@ -3,11 +3,11 @@ package me.yokeyword.fragmentation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.Animation;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 

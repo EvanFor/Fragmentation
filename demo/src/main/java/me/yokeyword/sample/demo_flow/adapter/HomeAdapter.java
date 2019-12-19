@@ -1,18 +1,19 @@
 package me.yokeyword.sample.demo_flow.adapter;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import me.yokeyword.sample.R;
-import me.yokeyword.sample.demo_flow.listener.OnItemClickListener;
 import me.yokeyword.sample.demo_flow.entity.Article;
+import me.yokeyword.sample.demo_flow.listener.OnItemClickListener;
 
 /**
  * 主页HomeFragment  Adapter
@@ -37,13 +38,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.item_home, parent, false);
         final MyViewHolder holder = new MyViewHolder(view);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                if (mClickListener != null) {
-                    mClickListener.onItemClick(position, v);
-                }
+        holder.itemView.setOnClickListener(v -> {
+            int position = holder.getAdapterPosition();
+            if (mClickListener != null) {
+                mClickListener.onItemClick(position, v);
             }
         });
         return holder;
@@ -65,17 +63,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
         return mItems.get(position);
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvTitle, tvContent;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
-            tvContent = (TextView) itemView.findViewById(R.id.tv_content);
-        }
-    }
-
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
+    }
+
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        private TextView tvTitle, tvContent;
+
+        MyViewHolder(View itemView) {
+            super(itemView);
+            tvTitle = itemView.findViewById(R.id.tv_title);
+            tvContent = itemView.findViewById(R.id.tv_content);
+        }
     }
 }

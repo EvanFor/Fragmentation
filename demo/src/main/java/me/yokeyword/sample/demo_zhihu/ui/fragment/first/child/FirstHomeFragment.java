@@ -2,17 +2,20 @@ package me.yokeyword.sample.demo_zhihu.ui.fragment.first.child;
 
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -75,10 +78,10 @@ public class FirstHomeFragment extends SupportFragment implements SwipeRefreshLa
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mRecy = (RecyclerView) view.findViewById(R.id.recy);
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab);
+        mToolbar = view.findViewById(R.id.toolbar);
+        mRecy = view.findViewById(R.id.recy);
+        mRefreshLayout = view.findViewById(R.id.refresh_layout);
+        mFab = view.findViewById(R.id.fab);
 
         mToolbar.setTitle(R.string.home);
 
@@ -90,28 +93,25 @@ public class FirstHomeFragment extends SupportFragment implements SwipeRefreshLa
         mRecy.setLayoutManager(manager);
         mRecy.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
-                FirstDetailFragment fragment = FirstDetailFragment.newInstance(mAdapter.getItem(position));
+        mAdapter.setOnItemClickListener((position, view1, vh) -> {
+            FirstDetailFragment fragment = FirstDetailFragment.newInstance(mAdapter.getItem(position));
 
-                // 这里是使用SharedElement的用例
-                // LOLLIPOP(5.0)系统的 SharedElement支持有 系统BUG， 这里判断大于 > LOLLIPOP
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    setExitTransition(new Fade());
-                    fragment.setEnterTransition(new Fade());
-                    fragment.setSharedElementReturnTransition(new DetailTransition());
-                    fragment.setSharedElementEnterTransition(new DetailTransition());
+            // 这里是使用SharedElement的用例
+            // LOLLIPOP(5.0)系统的 SharedElement支持有 系统BUG， 这里判断大于 > LOLLIPOP
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+                setExitTransition(new Fade());
+                fragment.setEnterTransition(new Fade());
+                fragment.setSharedElementReturnTransition(new DetailTransition());
+                fragment.setSharedElementEnterTransition(new DetailTransition());
 
-                    // 25.1.0以下的support包,Material过渡动画只有在进栈时有,返回时没有;
-                    // 25.1.0+的support包，SharedElement正常
-                    extraTransaction()
-                            .addSharedElement(((FirstHomeAdapter.VH) vh).img, getString(R.string.image_transition))
-                            .addSharedElement(((FirstHomeAdapter.VH) vh).tvTitle, "tv")
-                            .start(fragment);
-                } else {
-                    start(fragment);
-                }
+                // 25.1.0以下的support包,Material过渡动画只有在进栈时有,返回时没有;
+                // 25.1.0+的support包，SharedElement正常
+                extraTransaction()
+                        .addSharedElement(((FirstHomeAdapter.VH) vh).img, getString(R.string.image_transition))
+                        .addSharedElement(((FirstHomeAdapter.VH) vh).tvTitle, "tv")
+                        .start(fragment);
+            } else {
+                start(fragment);
             }
         });
 
@@ -126,7 +126,7 @@ public class FirstHomeFragment extends SupportFragment implements SwipeRefreshLa
 
         mRecy.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 mScrollTotal += dy;
                 if (mScrollTotal <= 0) {
@@ -142,22 +142,12 @@ public class FirstHomeFragment extends SupportFragment implements SwipeRefreshLa
             }
         });
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(_mActivity, "Action", Toast.LENGTH_SHORT).show();
-            }
-        });
+        mFab.setOnClickListener(v -> Toast.makeText(_mActivity, "Action", Toast.LENGTH_SHORT).show());
     }
 
     @Override
     public void onRefresh() {
-        mRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(false);
-            }
-        }, 2000);
+        mRefreshLayout.postDelayed(() -> mRefreshLayout.setRefreshing(false), 2000);
     }
 
     private void scrollToTop() {

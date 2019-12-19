@@ -1,13 +1,14 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.second.child.childpager;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -21,7 +22,6 @@ import me.yokeyword.sample.demo_zhihu.MainActivity;
 import me.yokeyword.sample.demo_zhihu.adapter.HomeAdapter;
 import me.yokeyword.sample.demo_zhihu.entity.Article;
 import me.yokeyword.sample.demo_zhihu.event.TabSelectedEvent;
-import me.yokeyword.sample.demo_zhihu.listener.OnItemClickListener;
 import me.yokeyword.sample.demo_zhihu.ui.fragment.second.child.DetailFragment;
 
 /**
@@ -55,8 +55,8 @@ public class FirstPagerFragment extends SupportFragment implements SwipeRefreshL
     }
 
     private void initView(View view) {
-        mRecy = (RecyclerView) view.findViewById(R.id.recy);
-        mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+        mRecy = view.findViewById(R.id.recy);
+        mRefreshLayout = view.findViewById(R.id.refresh_layout);
 
         mTitles = getResources().getStringArray(R.array.array_title);
         mContents = getResources().getStringArray(R.array.array_content);
@@ -69,13 +69,10 @@ public class FirstPagerFragment extends SupportFragment implements SwipeRefreshL
         mRecy.setLayoutManager(manager);
         mRecy.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
-                // 这里的DetailFragment在flow包里
-                // 这里是父Fragment启动,要注意 栈层级
-                ((SupportFragment) getParentFragment()).start(DetailFragment.newInstance(mAdapter.getItem(position).getTitle()));
-            }
+        mAdapter.setOnItemClickListener((position, view1, vh) -> {
+            // 这里的DetailFragment在flow包里
+            // 这里是父Fragment启动,要注意 栈层级
+            ((SupportFragment) getParentFragment()).start(DetailFragment.newInstance(mAdapter.getItem(position).getTitle()));
         });
 
         // Init Datas
@@ -103,12 +100,7 @@ public class FirstPagerFragment extends SupportFragment implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        mRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(false);
-            }
-        }, 2000);
+        mRefreshLayout.postDelayed(() -> mRefreshLayout.setRefreshing(false), 2000);
     }
 
     private void scrollToTop() {

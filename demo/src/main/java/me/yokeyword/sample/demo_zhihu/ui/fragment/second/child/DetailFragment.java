@@ -1,14 +1,16 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.second.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_zhihu.base.BaseBackFragment;
@@ -18,11 +20,9 @@ import me.yokeyword.sample.demo_zhihu.base.BaseBackFragment;
  */
 public class DetailFragment extends BaseBackFragment {
     public static final String TAG = DetailFragment.class.getSimpleName();
+    static final String KEY_RESULT_TITLE = "title";
     private static final int REQ_MODIFY_FRAGMENT = 100;
     private static final String ARG_TITLE = "arg_title";
-
-    static final String KEY_RESULT_TITLE = "title";
-
     private Toolbar mToolbar;
     private TextView mTvContent;
     private FloatingActionButton mFab;
@@ -56,9 +56,9 @@ public class DetailFragment extends BaseBackFragment {
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab);
-        mTvContent = (TextView) view.findViewById(R.id.tv_content);
+        mToolbar = view.findViewById(R.id.toolbar);
+        mFab = view.findViewById(R.id.fab);
+        mTvContent = view.findViewById(R.id.tv_content);
 
         mToolbar.setTitle(mTitle);
 
@@ -81,12 +81,7 @@ public class DetailFragment extends BaseBackFragment {
     private void initDelayView() {
         mTvContent.setText(R.string.large_text);
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startForResult(ModifyDetailFragment.newInstance(mTitle), REQ_MODIFY_FRAGMENT);
-            }
-        });
+        mFab.setOnClickListener(v -> startForResult(ModifyDetailFragment.newInstance(mTitle), REQ_MODIFY_FRAGMENT));
     }
 
     @Override

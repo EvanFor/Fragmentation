@@ -3,7 +3,6 @@ package me.yokeyword.fragmentation.debug;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import androidx.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -14,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -98,12 +99,7 @@ public class DebugHierarchyViewContainer extends ScrollView {
         params.leftMargin = dip2px(16);
         params.gravity = Gravity.CENTER_VERTICAL;
         img.setLayoutParams(params);
-        mTitleLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, R.string.fragmentation_stack_help, Toast.LENGTH_LONG).show();
-            }
-        });
+        mTitleLayout.setOnClickListener(v -> Toast.makeText(mContext, R.string.fragmentation_stack_help, Toast.LENGTH_LONG).show());
         mTitleLayout.addView(img);
         return mTitleLayout;
     }
@@ -121,24 +117,21 @@ public class DebugHierarchyViewContainer extends ScrollView {
             if (childFragmentRecord != null && childFragmentRecord.size() > 0) {
                 tempHierarchy++;
                 childTvItem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fragmentation_ic_right, 0, 0, 0);
-                final int finalChilHierarchy = tempHierarchy;
-                childTvItem.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (v.getTag(R.id.isexpand) != null) {
-                            boolean isExpand = (boolean) v.getTag(R.id.isexpand);
-                            if (isExpand) {
-                                childTvItem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fragmentation_ic_right, 0, 0, 0);
-                                DebugHierarchyViewContainer.this.removeView(finalChilHierarchy);
-                            } else {
-                                handleExpandView(childFragmentRecord, finalChilHierarchy, childTvItem);
-
-                            }
-                            v.setTag(R.id.isexpand, !isExpand);
+                final int finalChildHierarchy = tempHierarchy;
+                childTvItem.setOnClickListener(v -> {
+                    if (v.getTag(R.id.isexpand) != null) {
+                        boolean isExpand = (boolean) v.getTag(R.id.isexpand);
+                        if (isExpand) {
+                            childTvItem.setCompoundDrawablesWithIntrinsicBounds(R.drawable.fragmentation_ic_right, 0, 0, 0);
+                            DebugHierarchyViewContainer.this.removeView(finalChildHierarchy);
                         } else {
-                            childTvItem.setTag(R.id.isexpand, true);
-                            handleExpandView(childFragmentRecord, finalChilHierarchy, childTvItem);
+                            handleExpandView(childFragmentRecord, finalChildHierarchy, childTvItem);
+
                         }
+                        v.setTag(R.id.isexpand, !isExpand);
+                    } else {
+                        childTvItem.setTag(R.id.isexpand, true);
+                        handleExpandView(childFragmentRecord, finalChildHierarchy, childTvItem);
                     }
                 });
             } else {

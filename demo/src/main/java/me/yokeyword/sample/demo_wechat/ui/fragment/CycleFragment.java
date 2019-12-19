@@ -1,13 +1,14 @@
 package me.yokeyword.sample.demo_wechat.ui.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_wechat.base.BaseBackFragment;
@@ -50,28 +51,18 @@ public class CycleFragment extends BaseBackFragment {
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mTvName = (TextView) view.findViewById(R.id.tv_name);
-        mBtnNext = (Button) view.findViewById(R.id.btn_next);
-        mBtnNextWithFinish = (Button) view.findViewById(R.id.btn_next_with_finish);
+        mToolbar = view.findViewById(R.id.toolbar);
+        mTvName = view.findViewById(R.id.tv_name);
+        mBtnNext = view.findViewById(R.id.btn_next);
+        mBtnNextWithFinish = view.findViewById(R.id.btn_next_with_finish);
 
         String title = "CyclerFragment " + mNumber;
 
         mToolbar.setTitle(title);
         initToolbarNav(mToolbar);
 
-        mTvName.setText(title + "\n"+getString(R.string.can_swipe));
-        mBtnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start(CycleFragment.newInstance(mNumber + 1));
-            }
-        });
-        mBtnNextWithFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startWithPop(CycleFragment.newInstance(mNumber + 1));
-            }
-        });
+        mTvName.setText(title + "\n" + getString(R.string.can_swipe));
+        mBtnNext.setOnClickListener(v -> start(CycleFragment.newInstance(mNumber + 1)));
+        mBtnNextWithFinish.setOnClickListener(v -> startWithPop(CycleFragment.newInstance(mNumber + 1)));
     }
 }

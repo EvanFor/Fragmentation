@@ -1,11 +1,12 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.fourth.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.sample.R;
@@ -35,19 +36,15 @@ public class MeFragment extends SupportFragment {
     }
 
     private void initView(View view) {
-        mTvBtnSettings = (TextView) view.findViewById(R.id.tv_btn_settings);
-        mTvBtnSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                start(SettingsFragment.newInstance());
-            }
-        });
+        mTvBtnSettings = view.findViewById(R.id.tv_btn_settings);
+        mTvBtnSettings.setOnClickListener(v -> start(SettingsFragment.newInstance()));
     }
 
     @Override
     public boolean onBackPressedSupport() {
         // 这里实际项目中推荐使用 EventBus接耦
-        ((ZhihuFourthFragment)getParentFragment()).onBackToFirstFragment();
+        assert getParentFragment() != null;
+        ((ZhihuFourthFragment) getParentFragment()).onBackToFirstFragment();
         return true;
     }
 }

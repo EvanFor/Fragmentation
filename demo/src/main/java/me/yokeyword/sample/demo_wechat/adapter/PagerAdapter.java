@@ -1,11 +1,12 @@
 package me.yokeyword.sample.demo_wechat.adapter;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +60,10 @@ public class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.MyViewHolder
         return mItems.size();
     }
 
+    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle;
 
@@ -66,9 +71,5 @@ public class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.MyViewHolder
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
         }
-    }
-
-    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
     }
 }

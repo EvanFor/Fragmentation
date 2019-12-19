@@ -2,8 +2,6 @@ package me.yokeyword.sample.demo_flow.ui.fragment.account;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.sample.R;
 import me.yokeyword.sample.demo_flow.base.BaseBackFragment;
@@ -63,25 +64,22 @@ public class RegisterFragment extends BaseBackFragment {
         toolbar.setTitle(R.string.register);
         initToolbarNav(toolbar);
 
-        mBtnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String strAccount = mEtAccount.getText().toString();
-                String strPassword = mEtPassword.getText().toString();
-                String strPasswordConfirm = mEtPasswordConfirm.getText().toString();
-                if (TextUtils.isEmpty(strAccount.trim())) {
-                    Toast.makeText(_mActivity, R.string.error_username, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (TextUtils.isEmpty(strPassword.trim()) || TextUtils.isEmpty(strPasswordConfirm.trim())) {
-                    Toast.makeText(_mActivity, R.string.error_pwd, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // 注册成功
-                mOnLoginSuccessListener.onLoginSuccess(strAccount);
-                popTo(LoginFragment.class, true);
+        mBtnRegister.setOnClickListener(v -> {
+            String strAccount = mEtAccount.getText().toString();
+            String strPassword = mEtPassword.getText().toString();
+            String strPasswordConfirm = mEtPasswordConfirm.getText().toString();
+            if (TextUtils.isEmpty(strAccount.trim())) {
+                Toast.makeText(_mActivity, R.string.error_username, Toast.LENGTH_SHORT).show();
+                return;
             }
+            if (TextUtils.isEmpty(strPassword.trim()) || TextUtils.isEmpty(strPasswordConfirm.trim())) {
+                Toast.makeText(_mActivity, R.string.error_pwd, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // 注册成功
+            mOnLoginSuccessListener.onLoginSuccess(strAccount);
+            popTo(LoginFragment.class, true);
         });
     }
 

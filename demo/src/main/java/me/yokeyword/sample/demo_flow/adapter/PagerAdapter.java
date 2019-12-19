@@ -1,11 +1,12 @@
 package me.yokeyword.sample.demo_flow.adapter;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,16 +61,16 @@ public class PagerAdapter extends RecyclerView.Adapter<PagerAdapter.MyViewHolder
         return mItems.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    static class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView tvTitle;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            tvTitle = itemView.findViewById(R.id.tv_title);
         }
-    }
-
-    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
     }
 }

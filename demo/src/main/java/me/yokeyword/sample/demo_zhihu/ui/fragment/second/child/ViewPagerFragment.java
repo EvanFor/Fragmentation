@@ -1,12 +1,14 @@
 package me.yokeyword.sample.demo_zhihu.ui.fragment.second.child;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.sample.R;
@@ -37,8 +39,8 @@ public class ViewPagerFragment extends SupportFragment {
     }
 
     private void initView(View view) {
-        mTab = (TabLayout) view.findViewById(R.id.tab);
-        mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        mTab = view.findViewById(R.id.tab);
+        mViewPager = view.findViewById(R.id.viewPager);
 
         mTab.addTab(mTab.newTab());
         mTab.addTab(mTab.newTab());

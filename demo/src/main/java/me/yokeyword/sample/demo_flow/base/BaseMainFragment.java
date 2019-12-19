@@ -1,8 +1,9 @@
 package me.yokeyword.sample.demo_flow.base;
 
 import android.content.Context;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
 
 import me.yokeyword.sample.R;
 
@@ -20,12 +21,9 @@ public class BaseMainFragment extends MySupportFragment {
 
     protected void initToolbarNav(Toolbar toolbar, boolean isHome) {
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOpenDraweListener != null) {
-                    mOpenDraweListener.onOpenDrawer();
-                }
+        toolbar.setNavigationOnClickListener(v -> {
+            if (mOpenDraweListener != null) {
+                mOpenDraweListener.onOpenDrawer();
             }
         });
     }
@@ -36,8 +34,7 @@ public class BaseMainFragment extends MySupportFragment {
         if (context instanceof OnFragmentOpenDrawerListener) {
             mOpenDraweListener = (OnFragmentOpenDrawerListener) context;
         } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentOpenDrawerListener");
+
         }
     }
 
